@@ -13,23 +13,40 @@ class PostsNew extends Component {
   //  passes on errors for that tag if they exist
 
   renderField(field){
+    // double destructuring
+    const { meta: {touched, error } } = field;
+    const className = `form-group ${touched && error ? 'has-danger': ''}`;
+
+
     return (
-      <div className='form-group'>
+      <div className={className}>
         <label>{field.label}</label>
         <input className='form-control'
           type='text'
           {...field.input}
         />
-        {field.meta.error}
+        <div className='text-help'>
+          {touched ? error : ''}
+        </div>
       </div>
     );
   }
 
+  onSubmit(values) {
+
+    console.log(values);
+  }
+
   // the 'Field' only works with redux form and needs the component attribute
   // to render JSX to the DOM
+
+  // redux form does not submit to backend, must be done manually
+
   render () {
+    const { handleSubmit } = this.props;
+
     return (
-      <form >
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field name="title"
               label='Title for Post'
                component={this.renderField}
